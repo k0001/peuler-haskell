@@ -34,18 +34,23 @@ fibs = 1 : 1 : zipWith (+) fibs (tail fibs)
 -- Primes: Eratosthenes Sieve
 -- http://www.haskell.org/haskellwiki/Prime_numbers
 primesTo :: Int -> [Int]
-primesTo n = 2 : sieve [3,5..n] where
-    sieve []     = []
-    sieve (p:xs) = p : sieve (xs `minus` [p*p, p*p+2*p.. n])
+primesTo n = 2 : sieve [3,5..n]
+  where sieve []     = []
+        sieve (p:xs) = p : sieve (xs `minus` [p*p, p*p+2*p.. n])
+
+primes :: [Int]
+primes = 2 : sieve [3,5..]
+  where sieve []     = []
+        sieve (p:xs) = p : sieve (xs `minus` [p*p, p*p+2*p..])
 
 -- Primes: Factorization
 primeFactors :: Int -> [Int]
-primeFactors n = fact n 2 where
-    fact n start
-        | n == start         = [n]
-        | n `mod` start == 0 = start : (fact (n `div` start) start)
-        | start == 2         = fact n 3
-        | otherwise          = fact n (start + 2)
+primeFactors n = fact n 2
+  where fact n start
+            | n == start         = [n]
+            | n `mod` start == 0 = start : (fact (n `div` start) start)
+            | start == 2         = fact n 3
+            | otherwise          = fact n (start + 2)
 
 -- Digits
 digitsRev :: Int -> [Int]
@@ -88,8 +93,10 @@ p6 = let (a, b) = (sum . map (^2)) &&& ((^2) . sum) $ [1..100]
         in b - a
 -- 25164150
 
+p7 = primes !! 10000
+
 problems :: [Int]
-problems = [p1, p2, p3, p4, p5, p6]
+problems = [p1, p2, p3, p4, p5, p6, p7]
 
 usageFailText :: String
 usageFailText = printf "Sorry, pick one of [1-%d] problems." (length problems)
