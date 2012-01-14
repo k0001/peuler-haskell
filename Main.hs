@@ -1,4 +1,5 @@
 import Control.Applicative
+import Control.Arrow
 import System.CPUTime
 import System.Environment
 import System.Exit
@@ -83,9 +84,12 @@ p4 = maximum $ filter intIsPalindrome $ (*) <$> [100..999] <*> [100..999]
 p5 = foldl1 lcm [1..20]
 -- 232792560
 
+p6 = let (a, b) = (sum . map (^2)) &&& ((^2) . sum) $ [1..100]
+        in b - a
+-- 25164150
 
 problems :: [Int]
-problems = [p1, p2, p3, p4, p5]
+problems = [p1, p2, p3, p4, p5, p6]
 
 usageFailText :: String
 usageFailText = printf "Sorry, pick one of [1-%d] problems." (length problems)
