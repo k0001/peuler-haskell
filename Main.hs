@@ -63,7 +63,7 @@ digits = reverse . digitsRev
 -- Reverse an integer
 -- eg: 123 -> 321, 530 -> 35
 intReverse :: Int -> Int
-intReverse n = foldl (\acc x -> acc * 10 + x) 0 (digitsRev n) where
+intReverse n = foldl' (\acc x -> acc * 10 + x) 0 (digitsRev n) where
 
 -- Palindromes: integer check
 intIsPalindrome :: Int -> Bool
