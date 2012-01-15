@@ -1,7 +1,7 @@
 import Control.Applicative
 import Control.Arrow
 import Data.Char (digitToInt)
-import Data.List (foldl')
+import Data.List (foldl', tails)
 import System.CPUTime
 import System.Environment
 import System.Exit
@@ -70,12 +70,12 @@ intReverse n = foldl' (\acc x -> acc * 10 + x) 0 (digitsRev n)
 intIsPalindrome :: Int -> Bool
 intIsPalindrome n = n == intReverse n
 
+-- sliding 2 [1,2,3,4,5] == [[1,2],[2,3],[3,4],[4,5]]
+-- sliding 3 [1,2,3]     == [[1,2,3]]
+-- sliding 2 [1]         == []
+-- sliding 1 [1]         == [[1]]
 sliding :: Int -> [a] -> [[a]]
-sliding _ []     = []
-sliding 0 _      = []
-sliding n (x:xs) =
-    (x : take (n - 1) xs) : (filter ((>= n) . length) $ sliding n xs)
-
+sliding n = filter ((>= n) . length) . map (take n) . tails
 
 -- Problem solutions
 --
