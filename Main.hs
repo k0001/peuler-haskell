@@ -1,6 +1,5 @@
 import Control.Applicative
 import Control.Arrow
-import Control.Monad (guard)
 import Data.Char (digitToInt)
 import Data.List (foldl', tails)
 import System.CPUTime
@@ -84,35 +83,21 @@ sliding n = filter ((>= n) . length) . map (take n) . tails
 --
 
 p1 = sum [x | x <- [1..999], x `mod` 3 == 0 || x `mod` 5 == 0]
--- 233168
-
 
 p2 = sum [x | x <- takeWhile (<= 4000000) fibs, even x]
--- 4613732
-
 
 p3 = last $ primeFactors 600851475143
--- 6857
---
 
 p4 = maximum $ filter intIsPalindrome $ (*) <$> [100..999] <*> [100..999]
--- 906609
-
 
 p5 = foldl1 lcm [1..20]
--- 232792560
-
 
 p6 = let (a, b) = ((^2) . sum) &&& (sum . map (^2)) $ [1..100]
         in a - b
--- 25164150
-
 -- other approach using a monad to apply the same argument to more than one fun
 p6' = foldr (-) 0 $ [(^2) . sum, sum . map (^2)] >>= return . ($ [1..100])
 
-
 p7 = primes !! 10000
--- 104743
 
 p8 = maximum $ map (product . map digitToInt) (sliding 5 num)
   where readInt x = read x :: Int
@@ -137,21 +122,26 @@ p8 = maximum $ map (product . map digitToInt) (sliding 5 num)
               \05886116467109405077541002256983155200055935729725\
               \71636269561882670428252483600823257530420752963450"
 
-
 p9 = head [a*b*c | c <- [1..1000],
                    b <- [1..c-1],
                    a <- [1..b-1],
                    a + b + c == 1000,
                    a^2 + b^2 == c^2]
--- 31875000
-
 
 p10 = sum $ primesTo 2000000
--- 142913828922
 
 
-problems :: [Int]
-problems = [p1, p2, p3, p4, p5, p6, p7, p8, p9, p10]
+problems :: [(Int, Int)]
+problems = [(p1,  233168),
+            (p2,  4613732),
+            (p3,  6857),
+            (p4,  906609),
+            (p5,  232792560),
+            (p6,  25164150),
+            (p7,  104743),
+            (p8,  40824),
+            (p9,  31875000),
+            (p10, 142913828922)]
 
 usageFailText :: String
 usageFailText = printf "Sorry, pick one of [1-%d] problems." (length problems)
@@ -162,9 +152,15 @@ main = do
         []     -> putStrLn usageFailText >> exitFailure
         (pn:_) -> do
              let pn' = (read pn :: Int) in
-                if pn' > 0 && pn' <= length problems then
-                    printf "Problem %d: %d\n" pn' (problems !! (pn' - 1)) >>
-                    exitWith ExitSuccess
+                if pn' > 0 && pn' <= length problems then do
+                    let (result, expected) = problems !! (pn' - 1)
+                    printf "Problem %d\n\
+                              \  expected:   %d\n\
+                              \  result:     %d\n" pn' expected result
+                    if expected == result then
+                        printf "              OK\n"
+                    else
+                        printf "              FAIL\n" >> exitFailure
                 else
                     putStrLn usageFailText >> exitFailure
 
