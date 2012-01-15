@@ -137,16 +137,21 @@ p8 = maximum $ map (product . map digitToInt) (sliding 5 num)
               \05886116467109405077541002256983155200055935729725\
               \71636269561882670428252483600823257530420752963450"
 
+
 p9 = head [a*b*c | c <- [1..1000],
                    b <- [1..c-1],
                    a <- [1..b-1],
                    a + b + c == 1000,
                    a^2 + b^2 == c^2]
+-- 31875000
 
+
+p10 = sum $ primesTo 2000000
+-- 142913828922
 
 
 problems :: [Int]
-problems = [p1, p2, p3, p4, p5, p6, p7, p8, p9]
+problems = [p1, p2, p3, p4, p5, p6, p7, p8, p9, p10]
 
 usageFailText :: String
 usageFailText = printf "Sorry, pick one of [1-%d] problems." (length problems)
